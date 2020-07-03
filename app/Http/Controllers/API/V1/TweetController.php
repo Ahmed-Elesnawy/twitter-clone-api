@@ -27,8 +27,16 @@ class TweetController extends Controller
     public function index()
     {
         $tweets = Tweet::with('user')
-                 ->latest()
-                 ->paginate(10);
+                 ->latest();
+
+        if ( request()->has('search') and !empty(request()->search) )
+
+        {
+            $tweets = $tweets->where('title','like','%'. request()->search .'%')
+                             ->orWhere('content','like','%'. request()->search .'%');
+        }
+
+        $tweets = $tweets->paginate(10);
 
         return TweetResource::collection($tweets);
     }

@@ -18,6 +18,13 @@ class ProfileController extends Controller
 {
     public function updateProfile(User $user,ProfileRequest $request)
     {
+
+        if ( !auth()->user()->can('update', $user) )
+        {
+            return response()->json('not Authorized',401);
+        }
+
+        
     	$data = $request->only('phone');
 
     	if ( $request->hasFile('photo') )
