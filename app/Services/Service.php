@@ -13,6 +13,18 @@ use Storage;
 
 abstract class Service
 {
+
+	public function uploadPhoto($request)
+	{
+		return $request->file('photo')->store('tweets','public');
+	}
+
+
+	public function updatePhoto($request,$old)
+	{
+
+	}
+
 	public function deleteFile($path)
 	{
 		if ( $this->checkFile($path) )
@@ -26,5 +38,15 @@ abstract class Service
 	public function checkFile($path)
 	{
 		return Storage::disk('public')->has($path) ? true : false;
+	}
+
+
+
+
+
+
+	protected function checkOldPhoto($path)
+	{
+		return !is_null($path)
 	}
 }

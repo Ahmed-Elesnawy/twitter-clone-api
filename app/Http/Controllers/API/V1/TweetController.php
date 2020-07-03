@@ -7,6 +7,7 @@ use App\Models\Hashtag;
 use App\Http\Requests\TweetRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TweetResource;
+use App\Services\TweetService;
 use App\Traits\ApiResponseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,11 +15,17 @@ use Symfony\Component\HttpFoundation\Response;
 class TweetController extends Controller
 {
 
+
     use ApiResponseTrait;
 
-    public function __construct()
+    private $tweetService;
+
+    public function __construct(TweetService $service)
     {
         $this->middleware('jwt')->except(['index','show']);
+
+
+        $this->tweetService = $service;
     }
     
 
@@ -55,7 +62,7 @@ class TweetController extends Controller
 
         if ( $request->hasFile('photo') )
         {
-            $attributes['photo'] = $this->uploadPhoto($request);
+            $attributes['photo'] = $this->tweetService->uploadPhoto($request);
         }
 
         $tweet = auth()->user()->tweets()->create($attributes);
@@ -73,8 +80,14 @@ class TweetController extends Controller
             return $this->successResponse('Authorization Error',401);
         }
 
-        $tweet->update($request->validated());
+        $data = $request->except(['photo']);
         
+
+        if ( $request->hasFile('photo') )
+        {
+            $data['photo'] = $this->tweetService->updatePhoto($request,$tweet->photo);
+        }
+
         return new TweetResource($tweet);
     }
 
@@ -97,9 +110,6 @@ class TweetController extends Controller
 
 
 
-    protected function uploadPhoto($request)
-    {
-        return $request->file('photo')->store('tweets','public');
-    }
+    
 
 }
