@@ -4,7 +4,9 @@
 
 
 
+
 namespace App\Services;
+
 
 
 use Storage;
@@ -22,7 +24,12 @@ abstract class Service
 
 	public function updatePhoto($request,$old)
 	{
+		if ( $this->checkOldPhoto($old) )
+		{
+			$this->deleteFile($old)
+		}
 
+		return $this->uploadPhoto($request);
 	}
 
 	public function deleteFile($path)
@@ -39,10 +46,6 @@ abstract class Service
 	{
 		return Storage::disk('public')->has($path) ? true : false;
 	}
-
-
-
-
 
 
 	protected function checkOldPhoto($path)

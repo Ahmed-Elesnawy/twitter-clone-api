@@ -26,6 +26,8 @@ Route::prefix('v1')->group(function(){
 
     Route::get('users/{user}/{name}','UserController@show')->name('users.show');
 
+    Route::post('users/{user}/follow','FollowController@follow')->name('users.follow');
+
     Route::put('users/{user}/update','ProfileController@updateProfile')->name('users.update')->middleware('jwt');
 
     // Tweets Routes 

@@ -96,6 +96,11 @@ class User extends Authenticatable implements JWTSubject
         return Str::slug($this->name);
     }
 
+    public function isFollow($user)
+    {
+        return $this->follows->contains($user);
+    }
+
     /**
     * Jwt Methods
     */
