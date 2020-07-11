@@ -26,7 +26,7 @@ abstract class Service
 	{
 		if ( $this->checkOldPhoto($old) )
 		{
-			$this->deleteFile($old)
+			$this->deleteFile($old);
 		}
 
 		return $this->uploadPhoto($request);
@@ -50,6 +50,6 @@ abstract class Service
 
 	protected function checkOldPhoto($path)
 	{
-		return !is_null($path)
+		return !is_null($path);
 	}
 }

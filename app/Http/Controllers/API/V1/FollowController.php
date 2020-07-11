@@ -22,9 +22,9 @@ class FollowController extends Controller
 
 
     	return response()->json([
-    		'status'   => true
+    		'status'   => true,
     		'follow'   => auth()->user()->isFollow($user),
-    		'unfollow' => auth()->user()->isFollow($user),
+    		'unfollow' => !auth()->user()->isFollow($user),
     	]);
     }
 }
